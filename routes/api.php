@@ -2,23 +2,16 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\MemberController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-Route::get('/login', function () {
-    return 'Ian';
-});
+Route::get('member', [MemberController::class, 'index']);
+Route::post('member', [MemberController::class, 'store']);
+Route::get('member/{id}', [MemberController::class, 'show']);
+Route::get('member/{id}/edit', [MemberController::class, 'edit']);
+Route::put('member/{id}/edit', [MemberController::class, 'update']);
+Route::delete('member/{id}/delete', [MemberController::class, 'destroy']);
