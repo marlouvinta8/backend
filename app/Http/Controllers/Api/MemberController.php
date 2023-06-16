@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 class MemberController extends Controller
 {
+    //para makita lahat ng member
     public function index(){
         $member = Member::all();
 
@@ -25,6 +26,7 @@ class MemberController extends Controller
         }
     }
 
+    // di makakagawa ng account kapag may kulang sa finill-upan o may di nasunod sa hinihinging details
     public function store(Request $request) {
         $validator = Validator::make($request->all(), [
             'fullname' => 'required|string|max:191',
@@ -38,9 +40,10 @@ class MemberController extends Controller
             return response()->json([
                 'status' => 402,
                 'errors' => $validator->messages()
-            ], 422);
+            ], 402);
         }else{
 
+            //para sa paggawa ng bagong account ng member
             $member = Member::create([
                 'fullname' => $request->fullname,
                 'email' => $request->email,
@@ -63,6 +66,7 @@ class MemberController extends Controller
         }
     }
 
+    //para makita ang member dipende sa id na inilagay
     public function show($id){
         $member = Member::find($id);
         if($member){
@@ -79,6 +83,7 @@ class MemberController extends Controller
         }
     }
 
+    //para maisearch ang id ng member na ieedit
     public function edit($id){
         $member = Member::find($id);
         if($member){
@@ -94,7 +99,7 @@ class MemberController extends Controller
             ],404);
         }
     }
-
+    //requirements para makapag update ng account ng member
     public function update(Request $request, int $id){
         $validator = Validator::make($request->all(), [
             'fullname' => 'required|string|max:191',
@@ -134,6 +139,7 @@ class MemberController extends Controller
         }
     }
 
+    //pedeng tanggalin ang account ng member
     public function destroy($id){
         $member = Member::find($id);
         if($member){
