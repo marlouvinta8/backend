@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
+    //para mabasa lahat ng admin account
     public function index(){
         $admin = Admin::all();
         
@@ -25,6 +26,7 @@ class AdminController extends Controller
         }
     }
 
+    //para masave ang ginawang admin account
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
             'username' => 'required|string|max:191',
@@ -58,7 +60,54 @@ class AdminController extends Controller
         }
      }
 
+     //kapag mageedit ng account
      public function edit($id){
-        
+        $admin = Admin::find($id);
+        if($admin){
+            return responser()->json([
+                'status' => 200,
+                'admin' => $admin
+            ],200);
+        }else{
+            return response()->json([
+                'status' => 404,
+                'message' => 'No Admin Found'
+            ],404);
+        }
+     }
+
+     public function update(Request $request, int $id){
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|string|max:191',
+            'password' => 'required|string|min:5',
+        ]);
+
+        if($validator->fails()){
+
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->messages()
+            ],402);
+        }else{
+            $member = Admin::find($id);
+
+            if($member){
+
+                $member->update([
+                    'username' => $request->username,
+                    'password' => $request->password,
+                ]);
+
+                return response()->json([
+                    'status' => 200,
+                    'message' => "Admin Updated Successfully"
+                ],200);
+            }else{
+                return response()->json([
+                    'status' => 404,
+                    'message' => "No such Admin Found!"
+                ],404);
+            }
+        }
      }
 }

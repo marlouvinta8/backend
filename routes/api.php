@@ -22,4 +22,5 @@ Route::delete('member/{id}/delete', [MemberController::class, 'destroy']);
 // for admin account
 Route::get('login', [AdminController::class, 'index']);
 Route::post('login', [AdminController::class, 'store']);
-Route::get('login/{id}/edit', [MemberController::class, 'edit']);
+Route::get('login/{id}/edit', [AdminController::class, 'edit']);
+Route::put('login/{id}/edit', [AdminController::class, 'update']);
