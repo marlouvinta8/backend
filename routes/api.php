@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\AdminController;
 use App\Http\Controllers\Api\MemberController;
-
+use App\Http\Controllers\Api\PromoController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -24,3 +24,9 @@ Route::get('login', [AdminController::class, 'index']);
 Route::post('login', [AdminController::class, 'store']);
 Route::get('login/{id}/edit', [AdminController::class, 'edit']);
 Route::put('login/{id}/edit', [AdminController::class, 'update']);
+
+//for promo
+
+Route::get('promo', [PromoController::class, 'index']);
+Route::post('promo', [PromoController::class, 'store']);
+Route::get('promo/{id}', [PromoController::class, 'show']);
