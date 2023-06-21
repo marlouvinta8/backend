@@ -26,31 +26,7 @@ class AdminController extends Controller
         }
     }
 
-<<<<<<< HEAD
-   // para masave ang ginawang admin account
-    public function store(Request $request){
-        $validator = Validator::make($request->all(), [
-            'username' => 'required|string|max:191',
-            'password' => 'required|string|min:8',
-        ]);
-
-        if($validator->fails()){
-
-             return response()->json([
-                'status' => 500,
-                'message' => "Something Went Wrong!"
-            ],500);
-        }else{
-
-            return response()->json([
-                'status' => 200,
-                'admin' => $validator->messages()
-            ],200);
-        }
-        }
-     
-=======
-    //para masave ang ginawang admin account
+//para masave ang ginawang admin account
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
             'username' => 'required|string|max:191',
@@ -71,7 +47,6 @@ class AdminController extends Controller
             ],402);
         }
      }
->>>>>>> 2a14a829dacdf2f0d3379eeca2d660a1af05a4bd
 
      //kapag mageedit ng account
      public function edit($id){
@@ -139,4 +114,15 @@ class AdminController extends Controller
             ],404);
         }
      }
-}
+
+     public function logout(Request $request)
+     {
+         Admin::logout();
+ 
+         $request->session()->invalidate();
+ 
+         $request->session()->regenerateToken();
+ 
+         return redirect('/login');
+     }
+ }

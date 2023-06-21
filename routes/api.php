@@ -25,6 +25,7 @@ Route::get('login', [AdminController::class, 'index']);
 Route::post('login', [AdminController::class, 'store']);
 Route::get('login/{id}/edit', [AdminController::class, 'edit']);
 Route::put('login/{id}/edit', [AdminController::class, 'update']);
+Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
 
 //for promo
 
