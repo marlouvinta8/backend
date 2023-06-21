@@ -32,9 +32,14 @@ Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
 Route::get('promo', [PromoController::class, 'index']);
 Route::post('promo', [PromoController::class, 'store']);
 Route::get('promo/{id}', [PromoController::class, 'show']);
+Route::put('promo/{id}/edit', [PromoController::class, 'update']);
+Route::delete('promo/{id}/delete', [PromoController::class, 'destroy']);
 
 //for reservation
 
 Route::get('reservation', [ReservationsController::class, 'index']);
 Route::post('reservation', [ReservationController::class, 'store']);
 Route::post('reservation', [ReservationController::class, 'approval']);
+
+Route::get('product', [ProductController::class, 'index']);
+Route::post('product', [ProductController::class, 'store']);

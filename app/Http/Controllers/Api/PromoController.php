@@ -75,10 +75,66 @@ class PromoController extends Controller
             ],200);
         }else{
 
-            return response()->json([
+            return response()->json([   
                 'status' => 404,
                 'message' => "No such Promo Found"
             ], 404);
+        }
+    }
+
+    public function update(Request $request, int $id){
+        $validator = Validator::make($request->all(), [
+            'image' => 'required',
+            'promoname' => 'required|string|max:191',
+            'description' => 'required|string|max:191',
+            'price' => 'required|numeric',
+        ]);
+
+        if($validator->fails()){
+
+            return response()->json([
+                'status' => 404,
+                'message' => $validator->messages()
+            ],404);
+        }else{
+            $promo = Promo::find($id);
+
+            if($promo){
+
+                $promo->update([
+                    'image' => $request->image,
+                    'productname' => $request->productname,
+                    'description' => $request->description,
+                    'price' => $request->price
+                ]);
+
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Promo Updated Successfully'
+                ],200);
+            }else{
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'No Member Found'
+                ],404);
+            }
+        }
+    }
+
+    public function destroy($id){
+        $promo = Promo::find($id);
+        if($promo){
+
+            $promo->delete();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Promo Deleted Successfully'
+            ],200);
+        }else{
+            return response()->json([
+                'status' => 404,
+                'message' => 'No such Promo Found!'
+            ],404);
         }
     }
 }

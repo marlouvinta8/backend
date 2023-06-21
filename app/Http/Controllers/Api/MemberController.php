@@ -113,7 +113,7 @@ class MemberController extends Controller
             return response()->json([
                 'status' => 402,
                 'errors' => $validator->messages()
-            ], 422);
+            ], 402);
         }else{
             $member = Member::find($id);
 

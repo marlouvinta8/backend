@@ -36,7 +36,7 @@ class AdminController extends Controller
         if($validator->fails()){
             return response()->json([
                 'status' => 500,
-                'message' => "Something Went Wrong!"
+                'message' => "Incorrect Username or Password!"
             ],500);
 
             
