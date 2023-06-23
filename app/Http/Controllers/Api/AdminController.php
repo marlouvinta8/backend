@@ -30,35 +30,37 @@ class AdminController extends Controller
 //para masave ang ginawang admin account
     public function store(Request $request){
 
-        // $validator = Validator::make($request->all(), [
-        //     'username' => 'required|string|max:191',
-        //     'password' => 'required|string|min:5',
-        // ]);
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|string|max:191',
+            'password' => 'required|string|min:5',
+        ]);
 
-        // if($validator->fails()){
-        //     return response()->json([
-        //         'status' => 500,
-        //         'message' => "Incorrect Username or Password!"
-        //     ],500);
+        if($validator->fails()){
+            return response()->json([
+                'status' => 500,
+                'message' => "Incorrect Username or Password!"
+            ],500);
 
             
         
-        //     }else{return response()->json([
-        //         'status' => 402,
-        //         'admin' => $validator->messages()
-        //     ],402);
-       $request->validate([
-        'username' => 'required',
-        'password' => 'required'
-       ]);
+            }else{return response()->json([
+                'status' => 402,
+                'admin' => $validator->messages()
+            ],402);
+        }
+    }
+    //    $request->validate([
+    //     'username' => 'required',
+    //     'password' => 'required'
+    //    ]);
 
-       if(Auth::attempt(['username' => $request->username, 'password' => $request->password])){
-        $request->session()->regenerate();
-        return redirect()->intended('/member');
-       }
+    //    if(Auth::attempt(['username' => $request->username, 'password' => $request->password])){
+    //     $request->session()->regenerate();
+    //     return redirect()->intended('/member');
+    //    }
 
-       return back()->withErrors('message', 'Incorrect Username or Password!');
-     }
+    //    return back()->withErrors('message', 'Incorrect Username or Password!');
+    //  }
 
      //kapag mageedit ng account
      public function edit($id){
