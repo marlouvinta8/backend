@@ -16,7 +16,7 @@ class AuthCheck
      */
     public function handle(Request $request, Closure $next)
     {
-        if(session()->has(regenerate())){
+        if(!session()->has('regenerate')){
             return redirect('http://localhost:3000/login')->with('fail', 'Login First');
         }
         return $next($request);

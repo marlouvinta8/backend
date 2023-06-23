@@ -6,6 +6,7 @@ use session;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
@@ -29,6 +30,24 @@ class AdminController extends Controller
 
 //para masave ang ginawang admin account
     public function store(Request $request){
+//         {
+// $request->validate([
+// 'email' => 'required|email|unique:users',
+// 'password'=> 'required|min:5|max:12'
+// ]);
+// $user = Admin::where('email', '=', $request->email)->first();
+// if($user){
+// if(Hash::check($request->password, $user->password)) {
+// $request->session()->put('loginId', $user->id);
+// return redirect('http://localhost:3000/');
+// } else {
+// return back()->with('fail', 'Password not matches.');
+// }
+// }else{
+// return back()->with('fail', 'This username is not registered.');
+// }
+// }
+//     }
 
         $validator = Validator::make($request->all(), [
             'username' => 'required|string|max:191',
@@ -44,9 +63,9 @@ class AdminController extends Controller
             
         
             }else{return response()->json([
-                'status' => 402,
+                'status' => 200,
                 'admin' => $validator->messages()
-            ],402);
+            ],200);
         }
     }
     //    $request->validate([
@@ -131,7 +150,7 @@ class AdminController extends Controller
 
      public function logout(Request $request)
      {
-         Admin::logout();
+         Auth::logout();
  
          $request->session()->invalidate();
  
