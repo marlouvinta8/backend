@@ -28,24 +28,17 @@ class AdminController extends Controller
 
 //para masave ang ginawang admin account
     public function store(Request $request){
-        $validator = Validator::make($request->all(), [
-            'username' => 'required|string|max:191',
-            'password' => 'required|string|min:5',
-        ]);
+       $request->validate([
+        'username' => 'required',
+        'password' => 'required'
+       ]);
 
-        if($validator->fails()){
-            return response()->json([
-                'status' => 500,
-                'message' => "Incorrect Username or Password!"
-            ],500);
+       if(Auth::attempt(['username' => $request->username, 'password' => $request->password])){
+        $request->session()->regenerate();
+        return redirect()->intended('/dashboard');
+       }
 
-            
-        
-            }else{return response()->json([
-                'status' => 402,
-                'admin' => $validator->messages()
-            ],402);
-        }
+       return back()->withErrors('message', 'Incorrect Username or Password!');
      }
 
      //kapag mageedit ng account
