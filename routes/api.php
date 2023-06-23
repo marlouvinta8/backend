@@ -12,8 +12,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // for member account
-Route::get('member', [MemberController::class, 'index']);
-Route::post('member', [MemberController::class, 'store']);
+Route::get('member', [MemberController::class, 'index'])->name('isLoggedIn');
+Route::post('member', [MemberController::class, 'store'])->name('isLoggedIn');
 Route::get('member/{id}', [MemberController::class, 'show']);
 Route::get('member/{id}/edit', [MemberController::class, 'edit']);
 Route::put('member/{id}/edit', [MemberController::class, 'update']);
@@ -22,7 +22,7 @@ Route::delete('member/{id}/delete', [MemberController::class, 'destroy']);
 
 // for admin account
 Route::get('login', [AdminController::class, 'index']);
-Route::post('login', [AdminController::class, 'store']);
+Route::post('login', [AdminController::class, 'store'])->name('store');
 Route::get('login/{id}/edit', [AdminController::class, 'edit']);
 Route::put('login/{id}/edit', [AdminController::class, 'update']);
 Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
