@@ -54,7 +54,7 @@ class AdminController extends Controller
 
        if(Auth::attempt(['username' => $request->username, 'password' => $request->password])){
         $request->session()->regenerate();
-        return redirect()->intended('/dashboard');
+        return redirect()->intended('/member');
        }
 
        return back()->withErrors('message', 'Incorrect Username or Password!');
