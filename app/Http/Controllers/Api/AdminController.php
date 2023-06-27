@@ -30,58 +30,136 @@ class AdminController extends Controller
 
 //para masave ang ginawang admin account
     public function store(Request $request){
-//         {
-// $request->validate([
-// 'email' => 'required|email|unique:users',
-// 'password'=> 'required|min:5|max:12'
-// ]);
-// $user = Admin::where('email', '=', $request->email)->first();
-// if($user){
-// if(Hash::check($request->password, $user->password)) {
-// $request->session()->put('loginId', $user->id);
-// return redirect('http://localhost:3000/');
-// } else {
-// return back()->with('fail', 'Password not matches.');
-// }
-// }else{
-// return back()->with('fail', 'This username is not registered.');
-// }
-// }
-//     }
-
         $validator = Validator::make($request->all(), [
-            'username' => 'required|string|max:191',
-            'password' => 'required|string|min:5',
+            'username' => 'required|string',
+            'password' => 'required|string',
         ]);
-
-        if($validator->fails()){
+        
+        if ($validator->fails()) {
             return response()->json([
-                'status' => 500,
-                'message' => "Incorrect Username or Password!"
-            ],500);
+                'status' => 400,
+                'message' => 'Validation Error',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+        
+        $credentials = $request->only('username', 'password');
+        $admin = Admin::where('username', $credentials['username'])
+                      ->where('password', $credentials['password'])
+                      ->first();
+        
+        if ($admin && Auth::attempt($credentials)) {
+            $token = $admin->createToken('authToken')->plainTextToken;
+        
+            return response()->json([
+                'status' => 200,
+                'message' => 'Login successful',
+                'token' => $token,
+                'admin' => $admin,
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 401,
+                'message' => 'Invalid credentials',
+            ], 401);
+        }
+
+
+        // - eto yung gumagana
+    //     $validator = Validator::make($request->all(), [
+    //         'username' => 'required|string|max:191',
+    //         'password' => 'required|string|min:5',
+    //     ]);
+
+    //     if($validator->fails()){
+    //         return response()->json([
+    //             'status' => 500,
+    //             'message' => "Incorrect Username or Password!"
+    //         ],500);
 
             
         
-            }else{return response()->json([
-                'status' => 200,
-                'admin' => $validator->messages()
-            ],200);
-        }
+    //         }else{return response()->json([
+    //             'status' => 200,
+    //             'admin' => $validator->messages()
+    //         ],200);
+    //     }
+    // }
+
+        // $validator = Validator::make($request->all(), [
+        //     'username' => 'required|string',
+        //     'password' => 'required|string',
+        // ]);
+
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'status' => 400,
+        //         'message' => 'Validation Error',
+        //         'errors' => $validator->errors(),
+        //     ], 400);
+        // }
+
+        // $credentials = $request->only('username', 'password');
+
+        // if (Auth::attempt($credentials)) {
+        //     $admin = Auth::admin();
+        //     $token = $admin->createToken('authToken')->plainTextToken;
+
+        //     return response()->json([
+        //         'status' => 200,
+        //         'message' => 'Login successful',
+        //         'token' => $token,
+        //         'admin' => $admin,
+        //     ], 200);
+        // } else {
+        //     return response()->json([
+        //         'status' => 401,
+        //         'message' => 'Invalid credentials',
+        //     ], 401);
+        // }
     }
-    //    $request->validate([
-    //     'username' => 'required',
-    //     'password' => 'required'
-    //    ]);
+        // $validator = Validator::make($request->all(), [
+        //     'username' => 'required|string|max:191',
+        //     'password' => 'required|string|min:5',
+        // ]);
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'status' => 500,
+        //         'message' => "Incorrect Username or Password!"
+        //     ], 500);
+        // } else {
+        //     // Authenticate the user
+        //     $credentials = $request->only('username', 'password');
+        //     if (Auth::attempt($credentials)) {
+        //         // Authentication passed
+        //         return response()->json([
+        //             'status' => 200,
+        //             'admin' => $validator->messages()
+        //         ], 200);
+        //     } else {
+        //         // Authentication failed
+        //         return response()->json([
+        //             'status' => 401,
+        //             'message' => "Invalid credentials"
+        //         ], 401);
+        //     }
+        // }
 
-    //    if(Auth::attempt(['username' => $request->username, 'password' => $request->password])){
-    //     $request->session()->regenerate();
-    //     return redirect()->intended('/member');
-    //    }
+        // if($validator->fails()){
+        //     return response()->json([
+        //         'status' => 500,
+        //         'message' => "Incorrect Username or Password!"
+        //     ],500);
 
-    //    return back()->withErrors('message', 'Incorrect Username or Password!');
-    //  }
+            
+        
+        //     }else{return response()->json([
+        //         'status' => 200,
+        //         'admin' => $validator->messages()
+        //     ],200);
+        // }
+    
 
-     //kapag mageedit ng account
      public function edit($id){
         $admin = Admin::find($id);
         if($admin){
