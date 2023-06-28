@@ -55,3 +55,7 @@ Route::get('services/{id}', [ServicesController::class, 'show']);
 Route::get('services/{id}/edit', [ServicesController::class, 'edit']);
 Route::put('services/{id}/edit', [ServicesController::class, 'update']);
 Route::delete('services/{id}/delete', [ServicesController::class, 'destroy']);
+
+Route::get('user', [AuthController::class, 'user']);
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
