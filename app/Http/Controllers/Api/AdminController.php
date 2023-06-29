@@ -33,7 +33,7 @@ class AdminController extends Controller
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
             'username' => 'required|string',
-            'password' => 'required|string',
+            'password' => 'required|string|min:5',
         ]);
         
         if ($validator->fails()) {
@@ -49,13 +49,13 @@ class AdminController extends Controller
                       ->where('password', $credentials['password'])
                       ->first();
         
-        if ($admin && Auth::attempt($credentials)) {
-            $token = $admin->createToken('authToken')->plainTextToken;
+        if ($admin && !Auth::attempt($credentials)) {
+           // $token = $admin->createToken('authToken')->plainTextToken;
         
             return response()->json([
                 'status' => 200,
                 'message' => 'Login successful',
-                'token' => $token,
+                //'token' => $token,
                 'admin' => $admin,
             ], 200);
         } else {
