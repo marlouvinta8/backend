@@ -15,8 +15,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // for member account
-Route::get('member', [MemberController::class, 'index']);//->middleware('isLoggedIn');
+Route::get('login/member', [MemberController::class, 'index']);//->middleware('isLoggedIn');
 Route::post('member', [MemberController::class, 'store']);//->middleware('isLoggedIn');
+Route::post('login/member', [MemberController::class, 'login'])->name('login/member');
 Route::get('member/{id}', [MemberController::class, 'show']);
 Route::get('member/{id}/edit', [MemberController::class, 'edit']);
 Route::put('member/{id}/edit', [MemberController::class, 'update']);
@@ -28,10 +29,9 @@ Route::get('login', [AdminController::class, 'index']);
 Route::post('login', [AdminController::class, 'store'])->name('login');
 Route::get('login/{id}/edit', [AdminController::class, 'edit']);
 Route::put('login/{id}/edit', [AdminController::class, 'update']);
-Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
+Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
 
 
-Route::post('login/member', [MemberController::class, 'login'])->name('login/member');
 
 //for promo
 

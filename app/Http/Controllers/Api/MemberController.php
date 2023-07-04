@@ -85,7 +85,7 @@ class MemberController extends Controller
                       ->where('password', $credentials['password'])
                       ->first();
         
-        if ($member && !Auth::attempt($credentials)) {
+        if ($member) {
            // $token = $admin->createToken('authToken')->plainTextToken;
         
             return response()->json([
