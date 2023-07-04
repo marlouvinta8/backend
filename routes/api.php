@@ -2,9 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\api\AdminController;
 use App\Http\Controllers\Api\PromoController;
 use App\Http\Controllers\Api\MemberController;
+use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ServicesController;
 use App\Http\Controllers\Api\ReservationsController;
 
@@ -55,3 +57,5 @@ Route::get('services/{id}', [ServicesController::class, 'show']);
 Route::get('services/{id}/edit', [ServicesController::class, 'edit']);
 Route::put('services/{id}/edit', [ServicesController::class, 'update']);
 Route::delete('services/{id}/delete', [ServicesController::class, 'destroy']);
+
+Route::resource('cart', CartController::class);
