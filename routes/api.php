@@ -30,6 +30,9 @@ Route::get('login/{id}/edit', [AdminController::class, 'edit']);
 Route::put('login/{id}/edit', [AdminController::class, 'update']);
 Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
 
+
+Route::post('login/member', [MemberController::class, 'login'])->name('login/member');
+
 //for promo
 
 Route::get('promo', [PromoController::class, 'index']);

@@ -77,4 +77,23 @@ class CartController extends Controller
             ]);
         }    
     }
+
+    public function update(Request $request, Cart $cart){
+        $cart->update(['quantity' => $request->quantity]);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Success'
+        ]);
+    }
+
+    public function destroy() {
+
+        $cart->delete();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Item successfully cancel'
+        ]);
+    }
 }

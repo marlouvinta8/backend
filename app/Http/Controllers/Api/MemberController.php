@@ -66,6 +66,43 @@ class MemberController extends Controller
         }
     }
 
+    public function login(Request $request){
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|string',
+            'password' => 'required|string|min:5',
+        ]);
+        
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Validation Error',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+        
+        $credentials = $request->only('username', 'password');
+        $member = Member::where('username', $credentials['username'])
+                      ->where('password', $credentials['password'])
+                      ->first();
+        
+        if ($member && !Auth::attempt($credentials)) {
+           // $token = $admin->createToken('authToken')->plainTextToken;
+        
+            return response()->json([
+                'status' => 200,
+                'message' => 'Login successful',
+                //'token' => $token,
+                'member' => $member,
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 401,
+                'message' => 'Invalid credentials',
+            ], 401);
+        }
+    }
+
+
     //para makita ang member dipende sa id na inilagay
     public function show($id){
         $member = Member::find($id);
