@@ -15,7 +15,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // for member account
-Route::get('login/member', [MemberController::class, 'index']);//->middleware('isLoggedIn');
+Route::get('member', [MemberController::class, 'index']);//->middleware('isLoggedIn');
 Route::post('member', [MemberController::class, 'store']);//->middleware('isLoggedIn');
 Route::post('login/member', [MemberController::class, 'login'])->name('login/member');
 Route::get('member/{id}', [MemberController::class, 'show']);
