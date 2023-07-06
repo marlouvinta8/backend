@@ -31,7 +31,7 @@ class MemberController extends Controller
         $validator = Validator::make($request->all(), [
             'fullname' => 'required|string|max:191',
             'email' => 'required|email|max:191',
-            'username' => 'required|string|max:191',
+            'username' => 'required|string|max:191|unique:member',
             'password' => 'required|string|max:191',
         ]);
 
