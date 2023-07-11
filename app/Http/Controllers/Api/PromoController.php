@@ -27,41 +27,31 @@ class PromoController extends Controller
 
     public function store(Request $request) {
         $validator = Validator::make($request->all(), [
-            'image' => 'required',
-            'promoname' => 'required|string|max:191',
-            'description' => 'required|string|max:191',
-            'price' => 'required|numeric',
+        'image' => 'required|image|max:2048', // Paggamit ng validation rules
+    ]);
+    
+    if ($validator->fails()) {
+        return response()->json([
+            'message' => 'Validation error',
+            'errors' => $validator->errors(),
+        ], 422);
+    }
+    
+    // I-save ang larawan
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $imagePath = $image->store('public/images'); // Mag-upload ng larawan sa storage
+        
+        $promo = Promo::create([
+            'image' => $imagePath,
         ]);
-
-        if($validator->fails()) {
-
-            return response()->json([
-                'status' => 402,
-                'errors' => $validator->messages()
-            ], 402);
-        }else{
-
-            $promo = Promo::create([
-                'image' => $request->image,
-                'promoname' => $request->promoname,
-                'description' => $request->description,
-                'price' => $request->price
-            ]);
-
-            if($promo){
-
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'Promo Created Successfully'
-                ],200);
-            }else{
-
-                return response()->json([
-                    'status' => 500,
-                    'message' => 'Something Went Wrong!'
-                ], 500);
-            }
-        }
+        
+        return response()->json([
+            'status' => 200,
+            'message' => 'Promo Created Successfully',
+            'image_path' => $imagePath,
+        ], 200);
+    }
     }
 
     public function show($id){
