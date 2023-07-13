@@ -26,41 +26,35 @@ class ProductController extends Controller
     }
 
     public function store(Request $request){
-        $validator = Validator::make($request->all(),[
-            'image' => 'required',
-            'productname' => 'required|string',
-            'description' => 'required|string',
-            'price' => 'required|numeric'
-        ]);
-
-        if($validator->fails()){
-
-
-            return response()->json([
-                'status' => 402,
-                'errors' => $validator->messages()
-            ],402);
-        }else{
-
-            $product = Product::create([
-                'image' => $request->image,
-                'productname' => $request->productname,
-                'description' => $request->description,
-                'price' => $request->price
-            ]);
-
-            if($product){
-               return response()->json([
-                'status' => 200,
-                'message' => 'Product Created Successfully'
-               ],200);
-            }else{
+     
+            $product = new Product();
+            $product->productname = $request->input('productname');
+            $product->description = $request->input('description');
+            $product->price = $request->input('price');
+  
+            
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $extension = $file->getClientOriginalExtension();
+                $filename = time(). '.' .$extension;
+                $file->move('uploads/product/', $filename);
+                $product->image = $filename;
+            } else {
+                $product->image = '';
+            }
+              
+            if ($product->save()) { 
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Product Created Successfully'
+                ], 200);
+            } else {
                 return response()->json([
                     'status' => 500,
                     'message' => 'Something Went Wrong'
-                ],500);
+                ], 500);
             }
-        }
+        
     }
 
     public function show($id) {

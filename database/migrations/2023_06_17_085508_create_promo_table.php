@@ -15,11 +15,8 @@ return new class extends Migration
     {
         Schema::create('promo', function (Blueprint $table) {
             $table->id();
-            $table->string('image');
+            $table->mediumText('image');
             $table->string('promoname');
-            $table->string('description');
-            $table->decimal('price', 8,2);
-            $table->timestamps();
         });
     }
 

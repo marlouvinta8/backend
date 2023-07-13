@@ -26,32 +26,33 @@ class PromoController extends Controller
     }
 
     public function store(Request $request) {
-        $validator = Validator::make($request->all(), [
-        'image' => 'required|image|max:2048', // Paggamit ng validation rules
-    ]);
-    
-    if ($validator->fails()) {
-        return response()->json([
-            'message' => 'Validation error',
-            'errors' => $validator->errors(),
-        ], 422);
-    }
-    
-    // I-save ang larawan
-    if ($request->hasFile('image')) {
-        $image = $request->file('image');
-        $imagePath = $image->store('public/images'); // Mag-upload ng larawan sa storage
         
-        $promo = Promo::create([
-            'image' => $imagePath,
-        ]);
+        $promo = new Promo();
+        $promo->promoname = $request->input('promoname');
+
         
-        return response()->json([
-            'status' => 200,
-            'message' => 'Promo Created Successfully',
-            'image_path' => $imagePath,
-        ], 200);
-    }
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time(). '.' .$extension;
+            $file->move('uploads/promo/', $filename);
+            $promo->image = $filename;
+        } else {
+            $promo->image = '';
+        }
+        
+         if ($promo->save()) {
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Promo Created Successfully'
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'Something Went Wrong'
+                ], 500);
+            }
+        
     }
 
     public function show($id){
