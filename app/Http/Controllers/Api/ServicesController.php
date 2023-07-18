@@ -26,40 +26,32 @@ class ServicesController extends Controller
     }
 
     public function store(Request $request){
-        $validator = Validator::make($request->all(), [
-            'image' => 'required',
-            'description' => 'required',
-            'price' => 'required'
-        ]);
+        $services = new Services();
+        $services->description = $request->input('description');
+        $services->price = $request->input('price');
 
-        if($validator()->fails()) {
-
-            return response()->json([
-                'status' => 402,
-                'errors' => $validator->messages()
-            ],402);
-        }else{
-
-            $services = Services::create([
-                'image' => $request->image,
-                'description' => $request->description,
-                'price' => $request->price
-            ]);
-
-            if($services){
-
+        
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time(). '.' .$extension;
+            $file->move('uploads/services/', $filename);
+            $services->image = $filename;
+        } else {
+            $services->image = '';
+        } 
+        
+         if ($services->save()) {
                 return response()->json([
                     'status' => 200,
                     'message' => 'Services Created Successfully'
-                ],200);
-            }else{
-
+                ], 200);
+            } else {
                 return response()->json([
                     'status' => 500,
                     'message' => 'Something Went Wrong'
-                ],500);
+                ], 500);
             }
-        }
     }
 
     public function show($id){

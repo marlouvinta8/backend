@@ -26,11 +26,9 @@ class PromoController extends Controller
     }
 
     public function store(Request $request) {
-        
         $promo = new Promo();
         $promo->promoname = $request->input('promoname');
 
-        
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();

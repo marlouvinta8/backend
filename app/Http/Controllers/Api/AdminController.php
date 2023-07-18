@@ -4,7 +4,9 @@ namespace App\Http\Controllers\api;
 
 use session;
 use App\Models\Admin;
+use App\Models\Sales;
 use App\Models\Member;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -211,7 +213,7 @@ class AdminController extends Controller
         }
      }
 
-     private function totalMember(){
+     public function totalMember(){
         $totalMember = Member::count();
 
         if($totalMember){
@@ -224,6 +226,40 @@ class AdminController extends Controller
                 'status' => 404,
                 'message' => 'No Member As Of Now'
             ],404);
+        }
+     }
+
+     public function totalSales(){
+        $sales = Sales::all();
+
+    if ($sales->isEmpty()) {
+        return response()->json([
+            'status' => 500,
+            'message' => 'No sales data found'
+        ], 500);
+    }
+
+    $totalSales = $sales->sum('total');
+
+    return response()->json([
+        'status' => 200,
+        'totalsales' => $totalSales
+    ], 200);
+     }
+
+     public function totalProduct(){
+        $totalproduct = Product::count();
+
+        if($totalproduct){
+            return response()->json([
+                'status' => 200,
+                'message' => $totalproduct
+            ],200);
+        }else {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Something Went Wrong'
+            ],500);
         }
      }
 

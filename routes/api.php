@@ -30,6 +30,9 @@ Route::post('login', [AdminController::class, 'store'])->name('login');
 Route::get('login/{id}/edit', [AdminController::class, 'edit']);
 Route::put('login/{id}/edit', [AdminController::class, 'update']);
 Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
+Route::get('totalmember', [AdminController::class, 'totalmember']);
+Route::get('totalsales', [AdminController::class, 'totalsales']);
+Route::get('totalproduct', [AdminController::class, 'totalproduct']);
 
 
 
