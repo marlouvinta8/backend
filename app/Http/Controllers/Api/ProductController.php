@@ -27,33 +27,32 @@ class ProductController extends Controller
 
     public function store(Request $request){
      
-            $product = new Product();
-            $product->productname = $request->input('productname');
-            $product->description = $request->input('description');
-            $product->price = $request->input('price');
-  
-            
-            if ($request->hasFile('image')) {
-                $file = $request->file('image');
-                $extension = $file->getClientOriginalExtension();
-                $filename = time(). '.' .$extension;
-                $file->move('uploads/product/', $filename);
-                $product->image = $filename;
-            } else {
-                $product->image = '';
-            }
-              
-            if ($product->save()) { 
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'Product Created Successfully'
-                ], 200);
-            } else {
-                return response()->json([
-                    'status' => 500,
-                    'message' => 'Something Went Wrong'
-                ], 500);
-            }
+        $product = new Product();
+        $product->productname = $request->input('productname');
+        $product->description = $request->input('description');
+        $product->price = $request->input('price');
+        
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time(). '.' .$extension;
+            $path = $file->store('public');
+            $product->image = $path;
+        } else {
+            $product->image = '';
+        }
+        
+        if ($product->save()) { 
+            return response()->json([
+                'status' => 200,
+                'message' => 'Product Created Successfully'
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Something Went Wrong'
+            ], 500);
+        }
         
     }
 
