@@ -32,6 +32,7 @@ class ProductController extends Controller
         $product->productname = $request->input('productname');
         $product->description = $request->input('description');
         $product->price = $request->input('price');
+        $product->quantity = $request->input('quantity');
         
         if ($request->hasFile('image')) {
             $file = $request->file('image');
@@ -96,7 +97,8 @@ class ProductController extends Controller
             'image' => 'required',
             'productname' => 'required|string',
             'description' => 'required|string',
-            'price' => 'required|numeric'
+            'price' => 'required|numeric',
+            'quantity' => 'required|numeric'
         ]);
 
         if($validator->fails()){
@@ -115,7 +117,8 @@ class ProductController extends Controller
                     'image' => $request->image,
                     'productname' => $request->prodcutname,
                     'description' => $request->description,
-                    'price' => $request->price
+                    'price' => $request->price,
+                    'quantity' => $request->quantity
                 ]);
 
                 return response()->json([
