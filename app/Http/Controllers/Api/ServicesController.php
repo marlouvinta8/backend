@@ -29,29 +29,28 @@ class ServicesController extends Controller
         $services = new Services();
         $services->description = $request->input('description');
         $services->price = $request->input('price');
-
         
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
             $filename = time(). '.' .$extension;
-            $file->move('uploads/services/', $filename);
-            $services->image = $filename;
+            $path = $file->store('public');
+            $services->image = $path;
         } else {
             $services->image = '';
-        } 
+        }
         
-         if ($services->save()) {
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'Services Created Successfully'
-                ], 200);
-            } else {
-                return response()->json([
-                    'status' => 500,
-                    'message' => 'Something Went Wrong'
-                ], 500);
-            }
+        if ($services->save()) { 
+            return response()->json([
+                'status' => 200,
+                'message' => 'Services Created Successfully'
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Something Went Wrong'
+            ], 500);
+        }
     }
 
     public function show($id){

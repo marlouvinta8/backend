@@ -38,7 +38,7 @@ class ProductController extends Controller
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
             $filename = time(). '.' .$extension;
-            $path = $file->store('public');
+            $path = $file->store('');
             $product->image = $path;
         } else {
             $product->image = '';
@@ -56,6 +56,19 @@ class ProductController extends Controller
             ], 500);
         }
         
+    }
+
+    public function getimage($filename){
+        $path = storage_path('app/public/'. $filename);
+
+        if(!Storage::exists($path)){
+            abort(404);
+        }
+
+        $file = Storage::get($path);
+        $type = Storage::mimeType($path);
+
+        return response::make($file, 200)->header("Content-Type", $type);
     }
 
     public function show($id) {
