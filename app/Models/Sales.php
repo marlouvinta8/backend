@@ -15,6 +15,9 @@ class Sales extends Model
         'productname',
         'price',
         'quantity',
+        'subtotal',
+        'discount',
+        'tax',
         'total',
         'date',
     ];

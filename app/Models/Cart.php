@@ -14,6 +14,7 @@ class Cart extends Model
     protected $fillable = [
         'pid',
         'name',
+        'image',
         'description',
         'price',
         'quantity',

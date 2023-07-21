@@ -28,28 +28,28 @@ class PromoController extends Controller
     public function store(Request $request) {
         $promo = new Promo();
         $promo->promoname = $request->input('promoname');
-
+        
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
             $filename = time(). '.' .$extension;
-            $file->move('uploads/promo/', $filename);
-            $promo->image = $filename;
+            $path = $file->store('');
+            $promo->image = $path;
         } else {
             $promo->image = '';
         }
         
-         if ($promo->save()) {
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'Promo Created Successfully'
-                ], 200);
-            } else {
-                return response()->json([
-                    'status' => 500,
-                    'message' => 'Something Went Wrong'
-                ], 500);
-            }
+        if ($promo->save()) { 
+            return response()->json([
+                'status' => 200,
+                'message' => 'Promo Created Successfully'
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Something Went Wrong'
+            ], 500);
+        }
         
     }
 

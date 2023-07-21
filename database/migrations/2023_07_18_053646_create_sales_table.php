@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string('productname');
             $table->string('price');
             $table->string('quantity');
+            $table->string('subtotal');
+            $table->string('discount');
+            $table->string('tax');
             $table->string('total');
             $table->string('date');
             $table->timestamps();

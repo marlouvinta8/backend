@@ -57,6 +57,9 @@ Route::get('product/{id}/edit', [ProductController::class, 'edit']);
 Route::put('product/{id}/edit', [ProductController::class, 'update']);
 Route::delete('product/{id}/delete', [ProductController::class, 'destroy']);
 
+Route::get('order', [ProductController::class, 'getcart']);
+Route::post('order', [ProductController::class, 'addtocart']);
+
 Route::get('services', [ServicesController::class, 'index']);
 Route::post('services', [ServicesController::class, 'store']);
 Route::get('services/{id}', [ServicesController::class, 'show']);
@@ -64,4 +67,4 @@ Route::get('services/{id}/edit', [ServicesController::class, 'edit']);
 Route::put('services/{id}/edit', [ServicesController::class, 'update']);
 Route::delete('services/{id}/delete', [ServicesController::class, 'destroy']);
 
-Route::resource('cart', CartController::class);
+//Route::resource('cart', CartController::class);

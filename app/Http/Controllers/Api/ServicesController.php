@@ -34,7 +34,7 @@ class ServicesController extends Controller
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
             $filename = time(). '.' .$extension;
-            $path = $file->store('public');
+            $path = $file->store('');
             $services->image = $path;
         } else {
             $services->image = '';

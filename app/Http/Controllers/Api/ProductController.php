@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -33,6 +34,7 @@ class ProductController extends Controller
         $product->description = $request->input('description');
         $product->price = $request->input('price');
         $product->quantity = $request->input('quantity');
+        $product->link = $request->input('link');
         
         if ($request->hasFile('image')) {
             $file = $request->file('image');
@@ -56,6 +58,51 @@ class ProductController extends Controller
             ], 500);
         }
         
+    }
+
+    public function addtocart(Request $request){
+        $product = Product::find($request->input('id'));
+
+        if($product->quantity < $request->input('quantity')) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Not Enough Stock'
+            ], 500);
+        }
+
+        $cart = Cart::create([
+            'pid' => $product->id,
+            'name' => $product->productname,
+            'image' => $product->image,
+            'description' => $product->description,
+            'price' => $product->price,
+            'quantity' => $request->input('quantity'),
+            'total' => $product->price * $request->input('quantity')
+        ]);
+
+        
+        $product->quantity -= $request->input('quantity');
+        $product->save();
+
+
+        if($cart){
+
+            return response()->json([
+                'status' => 200,
+                'message' => "Added To Cart"
+            ],200);
+        }else{
+            return response()->json([
+                'status' => 500,
+                'message' => "Something Went Wrong!"
+            ],500);
+        }
+    }
+
+    public function getcart()
+    {
+        $cartItems = Cart::all();
+        return response()->json($cartItems);
     }
 
     public function getimage($filename){
