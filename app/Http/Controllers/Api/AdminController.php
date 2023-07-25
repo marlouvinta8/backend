@@ -225,8 +225,11 @@ class AdminController extends Controller
              'tax' => 'nullable|numeric',
          ]);
  
-         $subtotal = $request->price * $request->quantity;
-         $total = $subtotal - ($request->discount ?? 0) + ($request->tax ?? 0);
+        $subtotal = $request->price * $request->quantity;
+        $discountPercentage = $request->discount ?? 0; // If discount is not provided, assume it's 0%
+        $discountAmount = $subtotal * ($discountPercentage / 100);
+        $total = $subtotal - $discountAmount;
+        $tax = $total * 0.12;
  
          $sales = Sales::create([
              'productname' => $request->productname,
@@ -235,7 +238,7 @@ class AdminController extends Controller
              'subtotal' => $subtotal,
              'discount' => $request->discount ?? 0,
              'date' => $request->date,
-             'tax' => $request->tax ?? 0,
+             'tax' => $tax,
              'total' => $total,
          ]);
  
