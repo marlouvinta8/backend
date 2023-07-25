@@ -213,6 +213,54 @@ class AdminController extends Controller
         }
      }
 
+     public function saveOrder(Request $request)
+     {
+         // Validate the incoming request data
+         $request->validate([
+             'productname' => 'required',
+             'price' => 'required|numeric',
+             'quantity' => 'required|integer',
+             'date' => 'required|date',
+             'discount' => 'nullable|numeric',
+             'tax' => 'nullable|numeric',
+         ]);
+ 
+         $subtotal = $request->price * $request->quantity;
+         $total = $subtotal - ($request->discount ?? 0) + ($request->tax ?? 0);
+ 
+         $sales = Sales::create([
+             'productname' => $request->productname,
+             'price' => $request->price,
+             'quantity' => $request->quantity,
+             'subtotal' => $subtotal,
+             'discount' => $request->discount ?? 0,
+             'date' => $request->date,
+             'tax' => $request->tax ?? 0,
+             'total' => $total,
+         ]);
+ 
+         if ($sales) {
+             return response()->json([
+                 'status' => 200,
+                 'message' => 'Order saved successfully.'
+             ], 200);
+         } else {
+             return response()->json([
+                 'status' => 500,
+                 'message' => 'Failed to save order.'
+             ], 500);
+         }
+     }
+
+     public function getorder(){
+        $orders = Sales::all();
+
+        return response()->json([
+            'status' => 200,
+            'message' => $orders
+        ],200);
+     }
+
      public function totalMember(){
         $totalMember = Member::count();
 
@@ -229,6 +277,7 @@ class AdminController extends Controller
         }
      }
 
+    
      public function totalSales(){
         $sales = Sales::all();
 

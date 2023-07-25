@@ -35,6 +35,10 @@ Route::get('totalsales', [AdminController::class, 'totalsales']);
 Route::get('totalproduct', [AdminController::class, 'totalproduct']);
 
 
+Route::get('sales', [AdminController::class, 'getorder']);
+Route::post('sales', [AdminController::class, 'saveorder']);
+
+
 
 //for promo
 
@@ -48,7 +52,8 @@ Route::delete('promo/{id}/delete', [PromoController::class, 'destroy']);
 
 Route::get('reservation', [ReservationsController::class, 'index']);
 Route::post('reservation', [ReservationsController::class, 'store']);
-Route::post('reservation', [ReservationsController::class, 'approval']);
+Route::post('reservation/{id}', [ReservationsController::class, 'approval']);
+
 
 Route::get('product', [ProductController::class, 'index']);
 Route::post('product', [ProductController::class, 'store']);
@@ -59,6 +64,8 @@ Route::delete('product/{id}/delete', [ProductController::class, 'destroy']);
 
 Route::get('order', [ProductController::class, 'getcart']);
 Route::post('order', [ProductController::class, 'addtocart']);
+Route::post('product/{id}/stockin', [ProductController::class, 'stockin']);
+Route::post('product/{id}/stockout', [ProductController::class, 'stockout']);
 
 Route::get('services', [ServicesController::class, 'index']);
 Route::post('services', [ServicesController::class, 'store']);

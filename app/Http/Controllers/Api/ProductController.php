@@ -105,6 +105,39 @@ class ProductController extends Controller
         return response()->json($cartItems);
     }
 
+    public function stockin(Request $request, $id){
+        $request->validate([
+            'quantity' => 'required'
+        ]);
+
+        $product = Product::findOrfail($id);
+        $addStock = $product->quantity + $request->quantity;
+        $product->update(['quantity' => $addStock]);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Stock Added',
+            'data' => $product,
+        ],200);
+     }
+
+
+       public function stockout(Request $request, $id){
+        $request->validate([
+            'quantity' => 'required'
+        ]);
+
+        $product = Product::findOrfail($id);
+        $minusStock = $product->quantity - $request->quantity;
+        $product->update(['quantity' => $minusStock]);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Stock Out',
+            'data' => $product,
+        ],200);
+     }
+
     public function getimage($filename){
         $path = storage_path('app/public/'. $filename);
 
