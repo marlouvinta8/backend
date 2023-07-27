@@ -299,6 +299,22 @@ class AdminController extends Controller
     ], 200);
      }
 
+     public function criticalStock() {
+        $criticalstock = Product::where('quantity', '<=', 20)->count();
+
+      if($criticalstock){
+        return response()->json([
+            'status' => 200,
+            'criticalstock' => $criticalstock
+        ],200);
+      }else{
+        return response()->json([
+            'status' => 500,
+            'message' => 'No Critical Stock'
+        ],500);
+      }
+     }
+
      public function totalProduct(){
         $totalproduct = Product::count();
 
