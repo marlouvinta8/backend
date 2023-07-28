@@ -65,6 +65,7 @@ Route::delete('product/{id}/delete', [ProductController::class, 'destroy']);
 
 Route::get('order', [ProductController::class, 'getcart']);
 Route::post('order', [ProductController::class, 'addtocart']);
+Route::post('cancelorder', [ProductController::class, 'cancelorder']);
 Route::post('product/{id}/stockin', [ProductController::class, 'stockin']);
 Route::post('product/{id}/stockout', [ProductController::class, 'stockout']);
 

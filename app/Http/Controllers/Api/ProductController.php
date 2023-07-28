@@ -99,6 +99,24 @@ class ProductController extends Controller
         }
     }
 
+    public function cancelorder(Request $request) {
+        $cartItems = $request->input('cartItem');
+
+        foreach($cartItems as $cartItems) {
+            $productId = $cartItems['id'];
+            $quantity = $cartItems['quantity'];
+
+            $originalQuantity = Product::find($productId)->quantity;
+
+            Product::where('id', $productId)->update(['quantity' => $originalQuantity + $quantity]);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Order Cancel Successfully'
+        ],200);
+    }
+
     public function getcart()
     {
         $cartItems = Cart::all();
@@ -148,7 +166,7 @@ class ProductController extends Controller
         $file = Storage::get($path);
         $type = Storage::mimeType($path);
 
-        return response::make($file, 200)->header("Content-Type", $type);
+       // return response::make($file, 200)->header("Content-Type", $type);
     }
 
     public function show($id) {
