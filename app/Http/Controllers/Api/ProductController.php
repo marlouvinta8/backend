@@ -61,62 +61,44 @@ class ProductController extends Controller
     }
 
     public function addtocart(Request $request){
-        $product = Product::find($request->input('id'));
-
-        if($product->quantity < $request->input('quantity')) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Not Enough Stock'
-            ], 500);
+        $productId = $request->input('id');
+        $quantity = $request->input('quantity');
+    
+        // Validate the order, check if product is available, and update the quantity
+        $product = Product::find($productId);
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
         }
-
-        $cart = Cart::create([
-            'pid' => $product->id,
-            'name' => $product->productname,
-            'image' => $product->image,
-            'description' => $product->description,
-            'price' => $product->price,
-            'quantity' => $request->input('quantity'),
-            'total' => $product->price * $request->input('quantity')
-        ]);
-
-        
-        $product->quantity -= $request->input('quantity');
+    
+        if ($product->quantity < $quantity) {
+            return response()->json([
+                'error' => 'Insufficient stock'], 400);
+        }
+    
+        $product->quantity -= $quantity;
         $product->save();
-
-
-        if($cart){
-
-            return response()->json([
-                'status' => 200,
-                'message' => "Added To Cart"
-            ],200);
-        }else{
-            return response()->json([
-                'status' => 500,
-                'message' => "Something Went Wrong!"
-            ],500);
-        }
+    
+        return response()->json([
+            'message' => 'Order placed successfully'], 200);
     }
 
     public function cancelorder(Request $request) {
         $cartItems = $request->input('cartItem');
-
-        foreach($cartItems as $cartItems) {
-            $productId = $cartItems['id'];
-            $quantity = $cartItems['quantity'];
-
+    
+        foreach ($cartItems as $cartItem) {
+            $productId = $cartItem['id'];
+            $quantity = $cartItem['quantity'];
+    
             $originalQuantity = Product::find($productId)->quantity;
-
+    
             Product::where('id', $productId)->update(['quantity' => $originalQuantity + $quantity]);
         }
-
+    
         return response()->json([
             'status' => 200,
             'message' => 'Order Cancel Successfully'
-        ],200);
+        ], 200);
     }
-
     public function getcart()
     {
         $cartItems = Cart::all();
