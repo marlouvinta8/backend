@@ -71,20 +71,19 @@ class ProductController extends Controller
             ], 500);
         }
 
-        $cart = Sales::create([
+        $cart = Cart::create([
             'pid' => $product->id,
             'name' => $product->productname,
             'image' => $product->image,
             'description' => $product->description,
-            'price' => $product->price,
+            'price' => $product->price,  
             'quantity' => $request->input('quantity'),
             'total' => $product->price * $request->input('quantity')
         ]);
 
-
+        
         $product->quantity -= $request->input('quantity');
         $product->save();
-
 
         if($cart){
 
