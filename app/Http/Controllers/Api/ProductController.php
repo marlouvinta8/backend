@@ -61,25 +61,42 @@ class ProductController extends Controller
     }
 
     public function addtocart(Request $request){
-        $productId = $request->input('id');
-        $quantity = $request->input('quantity');
-    
-        // Validate the order, check if product is available, and update the quantity
-        $product = Product::find($productId);
-        if (!$product) {
-            return response()->json(['error' => 'Product not found'], 404);
-        }
-    
-        if ($product->quantity < $quantity) {
+        $product = Product::find($request->input('id'));
+
+        if($product->quantity < $request->input('quantity')) {
             return response()->json([
-                'error' => 'Insufficient stock'], 400);
+                'status' => 404,
+                'message' => 'Not Enough Stock'
+            ], 500);
         }
-    
-        $product->quantity -= $quantity;
+
+        $cart = Sales::create([
+            'pid' => $product->id,
+            'name' => $product->productname,
+            'image' => $product->image,
+            'description' => $product->description,
+            'price' => $product->price,
+            'quantity' => $request->input('quantity'),
+            'total' => $product->price * $request->input('quantity')
+        ]);
+
+
+        $product->quantity -= $request->input('quantity');
         $product->save();
-    
-        return response()->json([
-            'message' => 'Order placed successfully'], 200);
+
+
+        if($cart){
+
+            return response()->json([
+                'status' => 200,
+                'message' => "Added To Cart"
+            ],200);
+        }else{
+            return response()->json([
+                'status' => 500,
+                'message' => "Something Went Wrong!"
+            ],500);
+        }
     }
 
     public function cancelorder(Request $request) {
