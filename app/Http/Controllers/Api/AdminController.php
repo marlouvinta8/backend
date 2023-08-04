@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use session;
+use App\Models\Cart;
 use App\Models\Admin;
 use App\Models\Sales;
 use App\Models\Member;
@@ -282,7 +283,7 @@ class AdminController extends Controller
 
     
      public function totalSales(){
-        $sales = Sales::all();
+        $sales = Cart::all();
 
     if ($sales->isEmpty()) {
         return response()->json([
@@ -321,7 +322,7 @@ class AdminController extends Controller
         if($totalproduct){
             return response()->json([
                 'status' => 200,
-                'message' => $totalproduct
+                'product' => $totalproduct
             ],200);
         }else {
             return response()->json([

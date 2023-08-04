@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('productname');
             $table->string('description');
             $table->decimal('price', 8,2);
-            $table->int('quantity');
+            $table->string('quantity');
             $table->string('link');
             $table->timestamps();
         });

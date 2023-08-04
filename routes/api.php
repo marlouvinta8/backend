@@ -33,7 +33,7 @@ Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
 Route::get('totalmember', [AdminController::class, 'totalmember']);
 Route::get('totalsales', [AdminController::class, 'totalsales']);
 Route::get('totalproduct', [AdminController::class, 'totalproduct']);
-Route::get('criticalstock', [AdminController::class, 'totalproduct']);
+Route::get('criticalstock', [AdminController::class, 'criticalstock']);
 
 
 Route::get('sales', [AdminController::class, 'getorder']);

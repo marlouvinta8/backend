@@ -61,42 +61,48 @@ class ProductController extends Controller
         
     }
 
-    public function addtocart(Request $request){
+    public function addtocart(Request $request)
+    {
         $product = Product::find($request->input('id'));
-
-        if($product->quantity < $request->input('quantity')) {
+    
+        if (!$product) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Product not found'
+            ], 404);
+        }
+    
+        if ($product->quantity < $request->input('quantity')) {
             return response()->json([
                 'status' => 404,
                 'message' => 'Not Enough Stock'
             ], 500);
         }
-
+    
         $cart = Cart::create([
             'pid' => $product->id,
-            'name' => $product->productname,
-            'image' => $product->image,
-            'description' => $product->description,
-            'price' => $product->price,  
+            'name' => $request->input('name'),
+            'image' => $request->input('image'),
+            'description' => $request->input('description'),
+            'price' => $request->input('price'),
             'quantity' => $request->input('quantity'),
-            'total' => $product->price * $request->input('quantity')
+            'total' => $request->input('total'),
         ]);
-
-        
-        $product->quantity -= $request->input('quantity');
-        $product->save();
-
-        if($cart){
-
-            return response()->json([
-                'status' => 200,
-                'message' => "Added To Cart"
-            ],200);
-        }else{
+    
+        if (!$cart) {
             return response()->json([
                 'status' => 500,
-                'message' => "Something Went Wrong!"
-            ],500);
+                'message' => 'Something Went Wrong!'
+            ], 500);
         }
+    
+        $product->quantity -= $request->input('quantity');
+        $product->save();
+    
+        return response()->json([
+            'status' => 200,
+            'message' => 'Payment Successfully!'
+        ], 200);
     }
 
     public function cancelorder(Request $request) {
