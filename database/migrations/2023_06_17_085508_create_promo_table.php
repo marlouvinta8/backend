@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->mediumText('image');
             $table->string('promoname');
+            $table->timestamps();
         });
     }
 

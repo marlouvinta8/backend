@@ -16,8 +16,11 @@ return new class extends Migration
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('email');
+            $table->string('phone');
+            $table->string('address');
             $table->date('reserve_date');
-            $table->boolean('reserved')->default(false);
+            $table->string('service');
             $table->timestamps();
         });
     }

@@ -13,7 +13,10 @@ class Reservations extends Model
 
     protected $fillable = [
         'name',
+        'email',
+        'phone',
+        'address',
         'reserve_date',
-        'reserved'
+        'service',
     ];
 }

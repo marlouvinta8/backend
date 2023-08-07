@@ -46,6 +46,7 @@ Route::post('sales', [AdminController::class, 'saveorder']);
 Route::get('promo', [PromoController::class, 'index']);
 Route::post('promo', [PromoController::class, 'store']);
 Route::get('promo/{id}', [PromoController::class, 'show']);
+Route::get('promo/{id}/edit', [PromoController::class, 'edit']);
 Route::put('promo/{id}/edit', [PromoController::class, 'update']);
 Route::delete('promo/{id}/delete', [PromoController::class, 'destroy']);
 
@@ -53,7 +54,7 @@ Route::delete('promo/{id}/delete', [PromoController::class, 'destroy']);
 
 Route::get('reservation', [ReservationsController::class, 'index']);
 Route::post('reservation', [ReservationsController::class, 'store']);
-Route::post('reservation/{id}', [ReservationsController::class, 'approval']);
+// Route::post('reservation/{id}', [ReservationsController::class, 'approval']);
 
 
 Route::get('product', [ProductController::class, 'index']);

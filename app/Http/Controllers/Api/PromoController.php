@@ -71,6 +71,22 @@ class PromoController extends Controller
         }
     }
 
+    public function edit($id) {
+        $promo = Promo::find($id);
+        if($promo) {
+
+            return response()->json([
+                'status' => 200,
+                'promo' => $promo
+            ],200);
+        }else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'No promo Found'
+            ],400);
+        }
+    }
+
     public function update(Request $request, int $id){
         $validator = Validator::make($request->all(), [
             'image' => 'required',

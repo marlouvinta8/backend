@@ -32,7 +32,11 @@ class ReservationsController extends Controller
     {
         $request->validate([
             'name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'address' => 'required',
             'reserve_date' => 'required|date',
+            'service' => 'required'
         ]);
 
          //request ng member
@@ -52,7 +56,7 @@ class ReservationsController extends Controller
             $reservations = Reservations::create([
                 'name' => $request->name,
                 'reserve_date' => $request->reserve_date,
-                'reserved' => false
+                // 'reserved' => false
             ]);
 
             if ($reservations) {
@@ -68,7 +72,7 @@ class ReservationsController extends Controller
     {
         //check muna kung ilang reservation na ang mayroon base sa araw na napili ng customer
         $reservationCount = Reservations::where('reserve_date', $reserve_date)
-            ->where('reserved', true)
+            // ->where('reserved', true)
             ->count();
 
              //kung ilang reservation lang kayang iacommodate sa isang araw
@@ -82,16 +86,16 @@ class ReservationsController extends Controller
         return $availableSlots;
     }
 
-    public function approval($id)
-    {
-        $reservation = Reservations::findOrFail($id);
-        $reservation->update(['reserved' => true]);
+    // public function approval($id)
+    // {
+    //     $reservation = Reservations::findOrFail($id);
+    //     $reservation->update(['reserved' => true]);
 
-        if ($reservation) {
-            return response()->json([
-                'status' => 200,
-                'message' => 'Reservation approved!'
-            ], 200);
-        }
-    }
+    //     if ($reservation) {
+    //         return response()->json([
+    //             'status' => 200,
+    //             'message' => 'Reservation approved!'
+    //         ], 200);
+    //     }
+    // }
 }
