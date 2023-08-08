@@ -27,23 +27,24 @@ class ReservationsController extends Controller
             ], 404);
         }
     }
-
     public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'address' => 'required',
-            'reserve_date' => 'required|date',
-            'service' => 'required'
-        ]);
+{
+    $validator = Validator::make($request->all(), [
+        'name' => 'required',
+        'email' => 'required|email',
+        'phone' => 'required|digits:11',
+        'address' => 'required',
+        'reserve_date' => 'required|date',
+        'service' => 'required'
+    ]);
 
-         //request ng member
-       // $name = $request->name;
-        $reserve_date = Carbon::parse($request->reserve_date)->format('M-d-y');
-
-         //para macheck kung may available slot sa araw na napili ng member
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => 402,
+            'errors' => $validator->messages()
+        ], 402);
+    } else {
+        $reserve_date = Carbon::parse($request->reserve_date);
         $availableSlots = $this->getAvailableSlots($reserve_date);
 
         if ($availableSlots <= 0) {
@@ -52,7 +53,8 @@ class ReservationsController extends Controller
                 'message' => 'This day is fully booked already'
             ], 400);
         } else {
-             //hindi ito madadagdag sa database hanggat hindi inaapprove ng admin
+
+            // Create the reservation
             $reservations = Reservations::create([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -70,13 +72,11 @@ class ReservationsController extends Controller
             }
         }
     }
-
+}
     private function getAvailableSlots($reserve_date)
     {
         //check muna kung ilang reservation na ang mayroon base sa araw na napili ng customer
-        $reservationCount = Reservations::where('reserve_date', $reserve_date)
-            // ->where('reserved', true)
-            ->count();
+        $reservationCount = Reservations::where('reserve_date', $reserve_date)->count();
 
              //kung ilang reservation lang kayang iacommodate sa isang araw
         $maxSlots = 5;
@@ -88,17 +88,4 @@ class ReservationsController extends Controller
 
         return $availableSlots;
     }
-
-    // public function approval($id)
-    // {
-    //     $reservation = Reservations::findOrFail($id);
-    //     $reservation->update(['reserved' => true]);
-
-    //     if ($reservation) {
-    //         return response()->json([
-    //             'status' => 200,
-    //             'message' => 'Reservation approved!'
-    //         ], 200);
-    //     }
-    // }
 }

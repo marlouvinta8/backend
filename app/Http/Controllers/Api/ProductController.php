@@ -29,7 +29,22 @@ class ProductController extends Controller
     }
 
     public function store(Request $request){
-     
+        $validator = Validator::make($request->all(), [
+            'productname' => 'required|string|max:191',
+            'description' => 'required|string|max:191',
+            'price' => 'required|integer|max:191',
+            'quantity' => 'required|integer|max:191',
+            'link' => 'required|string|max:191'
+        ]);
+
+        if($validator->fails()) {
+
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->messages()
+            ], 402);
+        }else{
+
         $product = new Product();
         $product->productname = $request->input('productname');
         $product->description = $request->input('description');
@@ -60,6 +75,7 @@ class ProductController extends Controller
         }
         
     }
+}
 
     public function addtocart(Request $request)
     {
@@ -253,19 +269,24 @@ class ProductController extends Controller
 
     public function destroy($id){
         $product = Product::find($id);
-        if($product){
-
+        
+        if ($product) {
+            // Delete the associated image from storage if it exists
+            if (!empty($product->image)) {
+                Storage::delete($product->image);
+            }
+    
             $product->delete();
-
+    
             return response()->json([
                 'status' => 200,
                 'message' => "Product Deleted Successfully"
-            ],200);
-        }else {
+            ], 200);
+        } else {
             return response()->json([
                 'status' => 404,
                 'message' => 'No Product Found'
-            ],404);
+            ], 404);
         }
     }
 }

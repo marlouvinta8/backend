@@ -26,6 +26,18 @@ class PromoController extends Controller
     }
 
     public function store(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'promoname' => 'required|string|max:191'
+            
+        ]);
+
+        if($validator->fails()) {
+
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->messages()
+            ], 402);
+        }else{
         $promo = new Promo();
         $promo->promoname = $request->input('promoname');
         
@@ -52,6 +64,7 @@ class PromoController extends Controller
         }
         
     }
+}
 
     public function show($id){
         $promo = Promo::find($id);
@@ -128,18 +141,24 @@ class PromoController extends Controller
 
     public function destroy($id){
         $promo = Promo::find($id);
-        if($promo){
-
+        
+        if ($promo) {
+            // Delete the associated image from storage if it exists
+            if (!empty($promo->image)) {
+                Storage::delete($promo->image);
+            }
+    
             $promo->delete();
+    
             return response()->json([
                 'status' => 200,
-                'message' => 'Promo Deleted Successfully'
-            ],200);
-        }else{
+                'message' => "Promo Deleted Successfully"
+            ], 200);
+        } else {
             return response()->json([
                 'status' => 404,
-                'message' => 'No such Promo Found!'
-            ],404);
+                'message' => 'No Promo Found'
+            ], 404);
         }
     }
 }

@@ -26,6 +26,19 @@ class ServicesController extends Controller
     }
 
     public function store(Request $request){
+        $validator = Validator::make($request->all(), [
+            'description' => 'required|string|max:191',
+            'price' => 'required|integer|max:191'
+        ]);
+
+        if($validator->fails()) {
+
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->messages()
+            ], 402);
+        }else{
+
         $services = new Services();
         $services->description = $request->input('description');
         $services->price = $request->input('price');
@@ -52,6 +65,7 @@ class ServicesController extends Controller
             ], 500);
         }
     }
+}
 
     public function show($id){
         $services = Services::find($id);
@@ -89,18 +103,24 @@ class ServicesController extends Controller
 
     public function destroy($id){
         $services = Services::find($id);
-        if($services){
-
+        
+        if ($services) {
+            // Delete the associated image from storage if it exists
+            if (!empty($services->image)) {
+                Storage::delete($services->image);
+            }
+    
             $services->delete();
+    
             return response()->json([
                 'status' => 200,
-                'message' => 'Services Deleted Successfully'
-            ],200);
-        }else{
+                'message' => "Services Deleted Successfully"
+            ], 200);
+        } else {
             return response()->json([
-                'status' => '404',
-                'message' => 'No such Services Found'
-            ],404);
+                'status' => 404,
+                'message' => 'No Services Found'
+            ], 404);
         }
     }
 }
