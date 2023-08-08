@@ -41,7 +41,7 @@ class ReservationsController extends Controller
 
          //request ng member
        // $name = $request->name;
-        $reserve_date = Carbon::parse($request->reserve_date)->format('Y-m-d');
+        $reserve_date = Carbon::parse($request->reserve_date)->format('M-d-y');
 
          //para macheck kung may available slot sa araw na napili ng member
         $availableSlots = $this->getAvailableSlots($reserve_date);
@@ -55,14 +55,17 @@ class ReservationsController extends Controller
              //hindi ito madadagdag sa database hanggat hindi inaapprove ng admin
             $reservations = Reservations::create([
                 'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'address' => $request->address,
                 'reserve_date' => $request->reserve_date,
-                // 'reserved' => false
+                'service' => $request->service
             ]);
 
             if ($reservations) {
                 return response()->json([
                     'status' => 200,
-                    'message' => 'Reservation submitted for admin approval'
+                    'message' => 'Reservation submitted successfully'
                 ], 200);
             }
         }
