@@ -10,21 +10,19 @@ use Illuminate\Support\Facades\Validator;
 
 class ReservationsController extends Controller
 {
-    public function index(Request $request)
-    {
-        $date = $request->input('date');//para makita ang mga naka reserve dipende sa date na ilalagay
-        $reservations = Reservations::whereDate('reserve_date', $date)->get();
-        
-        if ($reservations->count() > 0) {
+    public function index(){
+        $reservations = Reservations::all();
+
+        if($reservations->count() > 0) {
             return response()->json([
                 'status' => 200,
                 'reservations' => $reservations
-            ], 200);
-        } else {
+            ],200);
+        }else{
             return response()->json([
                 'status' => 404,
-                'message' => 'No Reservation'
-            ], 404);
+                'reservations' => 'No Reservation Found'
+            ],404);
         }
     }
     public function store(Request $request)
