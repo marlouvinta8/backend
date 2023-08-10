@@ -203,7 +203,7 @@ class AdminController extends Controller
 
     return response()->json([
         'status' => 200,
-        'totalsales' => $totalSales
+        'message' => $totalSales
     ], 200);
      }
 
@@ -213,7 +213,7 @@ class AdminController extends Controller
       if($criticalstock){
         return response()->json([
             'status' => 200,
-            'criticalstock' => $criticalstock
+            'message' => $criticalstock
         ],200);
       }else{
         return response()->json([
@@ -229,7 +229,7 @@ class AdminController extends Controller
         if($totalproduct){
             return response()->json([
                 'status' => 200,
-                'product' => $totalproduct
+                'message' => $totalproduct
             ],200);
         }else {
             return response()->json([
