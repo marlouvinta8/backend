@@ -5,17 +5,18 @@ namespace App\Http\Controllers\Api;
 use App\Models\Services;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ServicesController extends Controller
 {
     public function index(){
-        $services = Services::all();
+        $service = Services::all();
 
-        if($services->count() > 0) {
+        if($service->count() > 0) {
             return response()->json([
                 'status' => 200,
-                'services' => $services
+                'service' => $service
             ],200);
         }else{
             return response()->json([
